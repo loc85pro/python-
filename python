@@ -1,0 +1,166 @@
+import pygame, sys, random, times
+from pygame.locals import*
+pygame.init()
+
+WHITE = (255,255,255)
+BLACK = (0,0,0)
+RED   = (255,0,0)
+GREEN=(0,255,0)
+PURPLE=(162,0,124)
+
+screen_height=700
+screen_width=500
+screen=pygame.display.set_mode([screen_width,screen_height])
+
+BG = pygame.transform.scale(pygame.image.load("background.jpg"),(500,700))
+
+smallfont = pygame.font.SysFont('Corbel',35) 
+  
+
+QuitImage = pygame.transform.scale(pygame.image.load('quit.png'),(100,50))
+PlayImage = pygame.transform.scale(pygame.image.load('play.png'),(200,100))
+StoreImage = pygame.transform.scale(pygame.image.load('store.png'),(100,100))
+NextImage = pygame.transform.scale(pygame.image.load('next.jpg'),(100,50))
+
+
+
+music = pygame.mixer.music.load("alert.mp3")
+
+xe=0
+
+
+def CharacterMenu():
+    screen_height=700
+    screen_width=500
+    screen=pygame.display.set_mode([screen_width,screen_height])
+    Yellowcar = pygame.transform.scale(pygame.image.load('yellowcar.png'),(200,100))
+    Pinkcar = pygame.transform.scale(pygame.image.load('pinkcar.png'),(200,100))
+    Bluecar = pygame.transform.scale(pygame.image.load('bluecar.png'),(200,100))
+    Greencar = pygame.transform.scale(pygame.image.load('greencar.png'),(200,100))
+    Preniumcar = pygame.transform.scale(pygame.image.load('preniumcar.png'),(200,100))
+    BG=pygame.transform.scale(pygame.image.load('background.png'),(500,700))
+    screen.blit(BG,(0,0))
+    screen.blit(Yellowcar,(150,200))
+    screen.blit(Bluecar,(150,350))
+    screen.blit(Greencar,(150,500))
+    global xe
+
+    while True:
+        for ev in pygame.event.get():
+            if ev.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            if ev.type == MOUSEBUTTONDOWN:
+                if 150<=mouse[0]<=350 and 200<=mouse[1]<=300:
+                    return 1
+                if 150<=mouse[0]<=350 and 350<=mouse[1]<=450:
+                    return 2
+                if 150<=mouse[0]<=350 and 500<=mouse[1]<=600:
+                    return 3
+        
+        mouse=pygame.mouse.get_pos()
+        pygame.display.update()
+
+
+
+while True:
+	for ev in pygame.event.get(): 
+		
+		if ev.type == pygame.QUIT: 
+			pygame.quit() 
+		if ev.type == MOUSEBUTTONDOWN:
+			if 0<mouse[0]<100 and 0<mouse[1]<50:
+				pygame.quit()
+			if 400<mouse[0]<500 and 0<mouse[1]<100:
+				CharacterMenu()
+
+
+			#-------------------------------------#
+			if 200<mouse[0]<300 and 300<mouse[1]<400:
+				pygame.mixer.music.play()
+
+			#---------------maingame------------------#
+				### chỉnh FPS ###
+				FPS=60
+				fpsClock=pygame.time.Clock()
+
+				GAME_SOUNDS={}
+
+				### setcolor ### 
+				BLACK=(0,0,0)
+				PURPLE=(162,0,124)
+				WHITE=(255,255,255)
+				RED=(255,0,0)
+				GREEN=(0,255,0)
+
+				### các thônng số ban đầu để chạy ###
+				location=0
+				speed=5
+				speed1=5
+				location1=0
+
+				### màn hình game ###
+				screen = pygame.display.set_mode((1000,700))
+				pygame.display.set_caption('SPEED GAME')
+
+				### các vị trí mà xe thay đổi tốc độ ###
+				vt1=pygame.Surface((100,0),SRCALPHA)
+				vt2=pygame.Surface((100,0),SRCALPHA)
+				vt3=pygame.Surface((100,0),SRCALPHA)
+
+				 ### nhạc ###
+				pygame.mixer.init()
+				pygame.mixer.music.load("E:\ohno.mp3")
+				pygame.mixer.music.play()
+
+				### set icon ###
+				a=pygame.image.load("E:\icon.png")
+				pygame.display.set_icon(a)
+
+				### background
+				BGSPEED = 1.5
+				BGIMG = pygame.image.load('E:\yasuo.jpg').convert()
+
+
+
+				### vòng lặp cho đến khi bấm close ###
+				while True:
+					for event in pygame.event.get():
+						if event.type == QUIT:
+								pygame.quit()
+								sys.exit()
+					### ------------ bắt đầu ------------ ###
+
+
+					### setup xe ###
+					screen.fill(GREEN)
+					screen.blit(BGIMG, [0, 0])
+					pygame.draw.rect(screen,(255, 0, 0),(location,80,150,50),20)
+					pygame.draw.rect(screen,PURPLE,(location1, 150, 150,50),20)
+
+					### vẽ các vạch của chặng ###
+					pygame.draw.line(screen,BLACK,(100,0),(100,700),5)
+					pygame.draw.line(screen,BLACK,(300,0),(300,700),5)
+					pygame.draw.line(screen,BLACK,(500,0),(500,700),5)
+
+					### thay đổi tốc độ khi đi qua mỗi chặng ###
+					location+=speed
+					location1+=speed1
+					if location == 100 or location == 300 or location == 500:
+						speed=random.randrange(1,5,1)
+					if location1 == 100 or location1 == 300 or location1 == 500:
+						speed1=random.randrange(1,5,1)
+					if location>=1000:
+						location-=1000
+					if location1>=1000:
+						location1-=1000
+					
+					pygame.display.update()
+					fpsClock.tick(FPS)
+	
+	screen.blit(BG,[0,0])
+	screen.blit(QuitImage, (5,5)) 
+	screen.blit(StoreImage	, (405,5))
+	screen.blit(PlayImage,(205,320))
+	mouse=pygame.mouse.get_pos()
+	pygame.display.update()
